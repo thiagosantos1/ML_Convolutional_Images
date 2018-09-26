@@ -14,7 +14,7 @@ from math import ceil
 def read_images(img_path):
   
   try:
-    img = np.array(imageio.imread(img_path), dtype=np.uint8)
+    img = np.array(imageio.imread(img_path), dtype=np.float64)
   except:
     print("Img " + str(img_path) + " do not exist")
     sys.exit(1)
@@ -89,11 +89,11 @@ def main():
 
   width,height = get_width_height(img)
 
-  output_img = convolutional(img,width,height,filter_conv)
+  output_img_ReLu = convolutional(img,width,height,filter_conv)
 
-  #display_img(output_img)
+  #display_img(output_img_ReLu)
 
-  save_img(img,out_name=out_name_)
+  save_img(output_img_ReLu,out_name=out_name_)
 
 if __name__ == '__main__':
   main()

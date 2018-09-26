@@ -65,7 +65,7 @@ def main():
 
   display_img(output_img_ReLu)
 
-  #save_img(img)
+  #save_img(output_img_ReLu)
 
 
 if __name__ == '__main__':
