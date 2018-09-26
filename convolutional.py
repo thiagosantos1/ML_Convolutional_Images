@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-  
 
 import matplotlib.pyplot as plt
-from scipy import misc
+#from scipy import misc
 import numpy as np
 from math import ceil
 import random
@@ -11,11 +11,13 @@ import imageio
 import sys
 from math import ceil
 
-def read_images():
+def read_images(img_path):
   
-  image_path = '../data_set/Faces/s10/1.pgm'
-  #img = misc.imread(image_path)#, flatten=True)
-  img = np.array(imageio.imread(image_path), dtype=np.uint8)
+  try:
+    img = np.array(imageio.imread(img_path), dtype=np.uint8)
+  except:
+    print("Img " + str(img_path) + " do not exist")
+    sys.exit(1)
 
   return img
 
@@ -26,8 +28,9 @@ def display_img(img):
   plt.axis('off')
   plt.show()
 
-def save_img(img, path_to='../data_set/out.pgm'):
-  imageio.imwrite(path_to, img[:, :])
+def save_img(img, path_to='../data_set_Faces/Faces_out/', out_name='out'):
+  out=path_to+out_name+".pgm"
+  imageio.imwrite(out, img[:, :])
 
 def get_width_height(img):
   return [len(img[0]), len(img)]
@@ -64,22 +67,33 @@ def convolutional(img, width,height, filter_conv=[[-1,-1,-1], [-1,4,-1], [-1,-1,
 
 def main():
 
-  filter_conv=[[-1,-1,-1], [-1,8,-1], [-1,-1,-1]] # for edge and few more details
-  #filter_conv=[[0,-1,0], [-1,4,-1], [0,-1,0]] # for edge
+  #filter_conv=[[-1,-1,-1], [-1,8,-1], [-1,-1,-1]] # for edge and few more details
+  filter_conv=[[0,-1,0], [-1,4,-1], [0,-1,0]] # for edge
   #filter_conv=[[1/16,1/8,1/16], [1/8,1/4,1/8], [1/16,1/8,1/16]] # - The information diffuses nearly equally among all pixels; 
                                                                 # Gaussian blur or as Gaussian smoothing
 
-  img = read_images()
 
-  display_img(img)
+  img_path = '../data_set_Faces/Faces/s1/1.pgm'
+  out_name_ = 'out'
+
+  if len(sys.argv) >= 3:
+    img_path = sys.argv[1] 
+    out_name_ = sys.argv[2] 
+
+  elif len(sys.argv) >= 2:
+    img_path = sys.argv[1] 
+
+  img = read_images(img_path)
+
+  #display_img(img)
 
   width,height = get_width_height(img)
 
   output_img = convolutional(img,width,height,filter_conv)
 
-  display_img(output_img)
+  #display_img(output_img)
 
-  #save_img(img)
+  save_img(img,out_name=out_name_)
 
 if __name__ == '__main__':
   main()
